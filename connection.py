@@ -1,6 +1,7 @@
 import datetime
 import serial
 
+
 class Connection:
 
     name = ""
@@ -8,11 +9,15 @@ class Connection:
     address = ""
     serialconnection = None
     logfile = None
+    socketio_reference = None
+    rx_buffer = []
 
-    def __init__(self, name, address, isvirtual=False):
+    def __init__(self, name, address, socketio, isvirtual=False):
         self.name = name
         self.address = address
         self.isvirtual = isvirtual
+        self.socketio_reference = socketio
+
         if isvirtual:
             #This is a dummy connection instantiate a new file
             self.logfile = open(name+'.log','w') 
@@ -23,6 +28,7 @@ class Connection:
     def connect_serial(self):
         #instatntiate the socket object
         self.serialconnection = serial.Serial(self.address)
+        #TODO - Need to create a async serial read/flush system
     
     def send_data(self, data):
         #send data through the socket object
@@ -47,4 +53,3 @@ class Connection:
             self.logfile.close()
         else:
             self.serialconnection.close()
-

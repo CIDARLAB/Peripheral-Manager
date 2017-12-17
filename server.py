@@ -1,9 +1,9 @@
-import json
-import devices 
-import socketio
 import eventlet
 import eventlet.wsgi
+import socketio
 from flask import Flask, render_template
+
+import devices
 
 sio = socketio.Server()
 app = Flask(__name__)
@@ -41,8 +41,8 @@ def list_devices(sid):
     ret = devices.list_devices()
     sio.emit('list-devices', ret)
 
-@sio.on('rename-connection')
-def rename_connection(sid, data):
+@sio.on('rename-reference')
+def rename_reference(sid, data):
     print(data)
     print('rename-connections')
     print('old name : ', data['old'])
@@ -56,18 +56,16 @@ def list_connections(sid):
     ret = devices.list_connections()
     sio.emit('list-connections', ret)
 
-@sio.on('activate')
+@sio.on('activate-connection')
 def activate(sid, data):
-    # Activate teh connection
-    pass
+    ret = devices.create_connection(data['name'], data['address'], sio)
+    sio.emit('activate', ret)
 
-@sio.on('deactivate')
+@sio.on('deactivate-connection')
 def deactivate(sid, data):
-    # Deactivate the connection
-    pass
+    devices.close_connection(data['name'])
 
 if __name__ == '__main__':
     devices.list_devices()
     app = socketio.Middleware(sio,app)
     eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 3000)), app)
-
