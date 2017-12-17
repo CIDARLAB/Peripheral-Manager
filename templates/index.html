@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Testing</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+</head>
+
+<body>
+    <h1>Testing !!!! </h1>
+    <script>
+        const socket = io('http://localhost:3000');
+        socket.emit('message', "this is the test message - I'm not sure how this is....");
+        socket.emit('rename-connection', {
+            "old": "foo",
+            "new": "bar"
+        });
+        console.log("the thing should have worked")
+    </script>
+</body>
+
+</html>
+
+<script>
+</script>
