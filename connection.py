@@ -1,4 +1,5 @@
 import datetime
+from threading import Thread
 import serial
 
 
@@ -11,6 +12,7 @@ class Connection:
     logfile = None
     socketio_reference = None
     rx_buffer = []
+    rxthread = None
 
     def __init__(self, name, address, socketio, isvirtual=False):
         self.name = name
@@ -29,6 +31,8 @@ class Connection:
         #instatntiate the socket object
         self.serialconnection = serial.Serial(self.address)
         #TODO - Need to create a async serial read/flush system
+        self.rxthread = Thread(target=self.serial_rx_thread)
+        self.rxthread.start()
     
     def send_data(self, data):
         #send data through the socket object
@@ -41,7 +45,7 @@ class Connection:
             #Check if connection is open
             if False != self.serialconnection.is_open():
                 print("Error - ", self.address, " - Connection is closed")
-                return
+                return False
             
             #Send the serial data
             #TODO - Check to see if the write is happening correctly with an arudino echo script
@@ -53,3 +57,7 @@ class Connection:
             self.logfile.close()
         else:
             self.serialconnection.close()
+
+    def serial_rx_thread(self):
+        buf = self.serialconnection.read(100)
+        self.socketio_reference.emit(self.name, buf)
