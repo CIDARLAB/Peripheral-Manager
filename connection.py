@@ -1,5 +1,5 @@
-import serial
 import datetime
+import serial
 
 class Connection:
 
@@ -18,13 +18,13 @@ class Connection:
             self.logfile = open(name+'.log','w') 
         else:
             #This is a real connection do the serial connection
-            self.connectSerial()
+            self.connect_serial()
 
-    def connectSerial(self):
+    def connect_serial(self):
         #instatntiate the socket object
         self.serialconnection = serial.Serial(self.address)
     
-    def sendData(self, data):
+    def send_data(self, data):
         #send data through the socket object
         if self.isvirtual:
             #Write to the file

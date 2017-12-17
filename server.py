@@ -29,29 +29,31 @@ def sendCommand(sid, data):
     pass
 
 @sio.on('send-raw')
-def sendRaw(sid, data):
+def send_raw(sid, data):
     print('raw data', sid, data)
-    pass
+    devicename = data['name']
+    rawdata = data['payload']
+    devices.send_rawdata(devicename, rawdata)
 
 @sio.on('list-devices')
-def listDevices(sid):
+def list_devices(sid):
     print('Requesting devices')
-    ret = devices.listDevices()
+    ret = devices.list_devices()
     sio.emit('list-devices', ret)
 
 @sio.on('rename-connection')
-def renameConnection(sid, data):
+def rename_connection(sid, data):
     print(data)
     print('rename-connections')
     print('old name : ', data['old'])
     print('new name : ', data['new'])
-    ret = devices.renameConnection(data['old'], data['new'])
+    ret = devices.rename_connection(data['old'], data['new'])
     sio.emit('rename-connection', ret)
 
 @sio.on('list-connections')
-def listConnections(sid):
+def list_connections(sid):
     print('Requesting active connections')
-    ret = devices.listConnections()
+    ret = devices.list_connections()
     sio.emit('list-connections', ret)
 
 @sio.on('activate')
@@ -65,7 +67,7 @@ def deactivate(sid, data):
     pass
 
 if __name__ == '__main__':
-    devices.listDevices()
+    devices.list_devices()
     app = socketio.Middleware(sio,app)
     eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 3000)), app)
 
