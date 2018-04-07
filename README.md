@@ -1,10 +1,10 @@
 # Peripheral Manager
 
-The peripheral manager is a daemon that runs on the workstation that allows cloud based applications to connect to the workstation and acts as the middleware that allows tools to control the hardware connected to the workstation. This communication link is achieved using websockets and and then transferred to a serial communication link.
+The peripheral manager is a daemon that runs on the workstation that allows cloud based applications to connect to the workstation and acts as the middleware that allows tools to control the hardware connected to the workstation. This communication link is achieved using web-sockets and and then transferred to a serial communication link.
 
 ## Dev Dependencies
 
-This project uses `pipenv` to manage dependencies and the runtime (Python 3.6). The following commands will can be used to set up the development envionment.
+This project uses `pipenv` to manage dependencies and the runtime (Python 3.6). The following commands will can be used to set up the development environment.
 
 ```
 # This assumes you clone the repo and have python installed on your machine
@@ -19,7 +19,7 @@ python server.py            #Runs the primary application
 
 ## SocketIO Events
 
-The API for managing the peripheral manager uses the SocketIO events to communicate witht the perpheral manager
+The API for managing the peripheral manager uses the SocketIO events to communicate with the peripheral manager
 
 ### send-command
 
@@ -40,9 +40,11 @@ Sends the command and the list of arguments that go with the command to be conve
 }
 ```
 
+** Note ! - Not yet implemented **
+
 ### send-raw
 
-Sends the raw bindary command that is sent to the hardware device.
+Sends the raw binary command that is sent to the hardware device.
 
 #### Expected data
 - `device name`
@@ -53,7 +55,7 @@ Sends the raw bindary command that is sent to the hardware device.
 ```
 {
     "name" : STRING,
-    "command": Buffer()
+    "payload": Buffer()
 }
 ```
 
@@ -111,7 +113,6 @@ Ends the serial-socketio connection.
 
 #### Expected data
 - `device name`
-- `device address`
 
 #### Example
 
@@ -124,6 +125,14 @@ Ends the serial-socketio connection.
 ## rx
 
 The `rx` channels allow the user to monitor the outputs from the peripherals that are generated in the device. 
+
+#### Example
+
+```
+socket.on('<name>', function(data){
+    console.log(data);
+})
+```
 
 ## TODOS:
 
