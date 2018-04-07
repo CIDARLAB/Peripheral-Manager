@@ -54,15 +54,18 @@ def rename_reference(sid, data):
 def list_connections(sid):
     print('Requesting active connections')
     ret = devices.list_connections()
+    print(ret)
     sio.emit('list-connections', ret)
 
 @sio.on('activate-connection')
 def activate(sid, data):
     ret = devices.create_connection(data['name'], data['address'], sio)
-    sio.emit('activate', ret)
+    print("Keys:\n",ret)
+    sio.emit('activate-connection', ret)
 
 @sio.on('deactivate-connection')
 def deactivate(sid, data):
+    print(data)
     devices.close_connection(data['name'])
 
 if __name__ == '__main__':

@@ -2,24 +2,161 @@
 <html>
 
 <head>
-    <title>Testing</title>
+    <title>Testing Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
+
 </head>
 
 <body>
-    <h1>Testing !!!! </h1>
+    <h1 data-bind="">Testing !!!! </h1>
+    <h2>Devices:</h2> <button type="button" class="btn btn-primary" data-bind="click: getDevices">Get List of devices</button>
+    <div data-bind="foreach: devices">
+        <div>
+            <label data-bind="text: device"></label>
+            <button type="button" class="btn btn-sm btn-success" data-bind="click: connect">Connect</button>
+        </div>
+    </div>
+
+    <h2>Connections:</h2> <button type="button" class="btn btn-primary" data-bind="click: getConnections">Get List of Connection</button>
+    <div data-bind="foreach: connections">
+        <div>
+            <label data-bind="text: address"></label>
+            <button type="button" class="btn btn-sm btn-danger" data-bind="click: disconnect">Disconnect</button>
+            <br/>
+            <input type="text" data-bind="value : message"></textarea>
+            <button type="button" class="btn btn-sm btn-primary" data-bind="click: send">Send</button>
+
+        </div>
+    </div>
+
+
+
+
+
     <script>
         const socket = io('http://localhost:3000');
-        socket.emit('message', "this is the test message - I'm not sure how this is....");
-        socket.emit('rename-connection', {
-            "old": "foo",
-            "new": "bar"
-        });
-        console.log("the thing should have worked")
+        // socket.emit('rename-connection', {
+        //     "old": "foo", 
+        //     "new": "bar"
+        // });
+        console.log("Sending Hello World ");
+    </script>
+    <script>
+        function ab2str(buf) {
+            return String.fromCharCode.apply(null, new Uint8Array(buf));
+        }
+
+        function str2ab(str) {
+            var buf = new ArrayBuffer(str.length); // 2 bytes for each char
+            var bufView = new Uint8Array(buf);
+            for (var i = 0, strLen = str.length; i < strLen; i++) {
+                bufView[i] = str.charCodeAt(i);
+            }
+            return buf;
+        }
+
+        function Device() {
+            var self = this;
+            this.device = ko.observable("");
+
+            self.connect = function() {
+                console.log("Connecting to device: " + self.device());
+                //TODO: Send connection message pheripheral manager
+                socket.on("activate-connection", function(data) {
+                    console.log(data);
+                });
+                socket.emit("activate-connection", {
+                    "name": self.device(),
+                    "address": self.device()
+                })
+            }
+        };
+
+        function Connection() {
+            var self = this;
+            this.address = ko.observable("");
+            this.name = ko.observable("");
+            this.message = ko.observable("");
+
+
+            self.disconnect = function() {
+                console.log("Connecting to device: " + self.address());
+                //TODO: Send connection message pheripheral manager
+                socket.on("deactivate-connection", function(data) {
+                    console.log(data);
+                });
+                socket.emit("deactivate-connection", {
+                    "name": self.address()
+                })
+            }
+
+            self.send = function() {
+                var data = self.message();
+                // var payload;
+                // for (var i = 0; i < data.length; i++) {
+                //     payload += data[i].charCodeAt(0).toString(2);
+                // }
+                console.log(str2ab(data))
+                socket.emit("send-raw", {
+                    "name": self.name(),
+                    "payload": str2ab(data)
+
+                })
+            }
+        }
+
+        function AppViewModel() {
+            var self = this;
+
+            this.devices = ko.observableArray([]);
+            this.connections = ko.observableArray([]);
+
+            self.getDevices = function() {
+                socket.on('list-devices', function(data) {
+                    console.log("List of devices returned:");
+                    console.log(data);
+                    for (index in data) {
+                        var test = new Device();
+                        var item = data[index];
+                        test.device(item.device);
+                        console.log(item);
+                        console.log(test.device());
+                        self.devices.push(test);
+                    }
+
+                });
+                self.devices.removeAll();
+                console.log("requesting devices:");
+                socket.emit('list-devices');
+            }
+
+            self.getConnections = function() {
+                socket.on('list-connections', function(data) {
+                    console.log("List of devices returned:");
+                    console.log(data);
+                    for (index in data) {
+                        var connection = new Connection();
+                        var item = data[index];
+                        connection.name(item.name);
+                        connection.address(item.address);
+                        self.connections.push(connection);
+                    }
+
+                });
+                self.connections.removeAll();
+                console.log("requesting devices:");
+                socket.emit('list-connections');
+            }
+
+        }
+        ko.applyBindings(new AppViewModel());
     </script>
 </body>
 
 </html>
-
-<script>
-</script>

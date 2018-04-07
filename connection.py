@@ -1,4 +1,5 @@
 import datetime
+import threading
 from threading import Thread
 import serial
 
@@ -13,6 +14,7 @@ class Connection:
     socketio_reference = None
     rx_buffer = []
     rxthread = None
+    _stopevent = threading.Event()
 
     def __init__(self, name, address, socketio, isvirtual=False):
         self.name = name
@@ -43,7 +45,8 @@ class Connection:
             self.logfile.write(data, '\n')
         else:
             #Check if connection is open
-            if False != self.serialconnection.is_open():
+            if not self.serialconnection.isOpen():
+                print(self.serialconnection.isOpen())
                 print("Error - ", self.address, " - Connection is closed")
                 return False
             
@@ -56,8 +59,13 @@ class Connection:
         if self.isvirtual:
             self.logfile.close()
         else:
-            self.serialconnection.close()
+            self._stopevent.set()
 
     def serial_rx_thread(self):
-        buf = self.serialconnection.read(100)
-        self.socketio_reference.emit(self.name, buf)
+        if self._stopevent.is_set():
+            print("Stopping the RX thread")
+            self.serialconnection.close()
+            self.rxthread.join()
+        else:
+            buf = self.serialconnection.read(100)
+            self.socketio_reference.emit(self.name, buf)

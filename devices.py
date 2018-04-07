@@ -6,11 +6,33 @@ ACTIVE_CONNECTIONS = dict()
 
 def list_devices():
     ports = serial.tools.list_ports.comports()
-    print("Ports", ports)
-    return ports
+    ret = []
+    for port in ports:
+        val = {}
+        val["device"] = port.device
+        val["name"] = port.name
+        val["description"]  = port.description
+        val["hwid"] = port.hwid
+        val["vid"] = port.vid
+        val["pid"] = port.pid
+        val["serialnumuber"] = port.serial_number
+        val["location"] = port.location
+        val["maufacturer"] = port.manufacturer
+        val["product"] = port.product
+        val["interface"] = port.interface
+        ret.append(val) 
+    print("Devices Connected Now: \n", ret)
+    return ret
 
 def list_connections():
-    return ACTIVE_CONNECTIONS.values()
+    ret = []
+    for key in ACTIVE_CONNECTIONS.keys():
+        val = {}
+        connection = ACTIVE_CONNECTIONS[key]
+        val["name"] = connection.name
+        val["address"] = connection.address
+        ret.append(val)
+    return ret
 
 def rename_connection(oldname, newname):
     connection = ACTIVE_CONNECTIONS[oldname]
@@ -39,5 +61,6 @@ def send_rawdata(devicename, rawdata):
 
 def close_connection(devicename):
     connection = ACTIVE_CONNECTIONS[devicename]
-    connection.close_connection()
+    print(connection)
+    connection.stop()
     del ACTIVE_CONNECTIONS[devicename]
