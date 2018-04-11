@@ -31,7 +31,7 @@ class Connection:
 
     def connect_serial(self):
         #instatntiate the socket object
-        self.serialconnection = serial.Serial(self.address)
+        self.serialconnection = serial.Serial(port=self.address, baudrate=1152000)
         #TODO - Need to create a async serial read/flush system
         self.rxthread = Thread(target=self.serial_rx_thread)
         self.rxthread.start()

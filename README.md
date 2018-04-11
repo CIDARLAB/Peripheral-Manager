@@ -124,7 +124,7 @@ Ends the serial-socketio connection.
 
 ## rx
 
-The `rx` channels allow the user to monitor the outputs from the peripherals that are generated in the device. 
+The `rx` channels (identified by the name of the connection `<name>`) allow the user to monitor the outputs from the peripherals that are generated in the device. 
 
 #### Example
 
