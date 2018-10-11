@@ -15,6 +15,7 @@ pyserial = "*"
 
 [dev-packages]
 
+pyinstaller = "*"
 
 
 [requires]
