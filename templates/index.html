@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Testing Page</title>
+    <title>Peripheral-Manager</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -14,8 +14,8 @@
 </head>
 
 <body>
-    <h1 data-bind="">Testing !!!! </h1>
-    <h2>Devices:</h2> <button type="button" class="btn btn-primary" data-bind="click: getDevices">Get List of devices</button>
+    <h2 data-bind="">Peripheral-Manager</h2>
+    <h3>Devices:</h3> <button type="button" class="btn btn-primary" data-bind="click: getDevices">Get List of devices</button>
     <div data-bind="foreach: devices">
         <div>
             <label data-bind="text: device"></label>
@@ -23,7 +23,7 @@
         </div>
     </div>
 
-    <h2>Connections:</h2> <button type="button" class="btn btn-primary" data-bind="click: getConnections">Get List of Connection</button>
+    <h3>Connections:</h3> <button type="button" class="btn btn-primary" data-bind="click: getConnections">Get List of Connection</button>
     <div data-bind="foreach: connections">
         <div>
             <label data-bind="text: address"></label>
