@@ -17,6 +17,10 @@ pip freeze                  #Ensures the runtime python interpreter finds all mo
 python server.py            #Runs the primary application
 ``` 
 
+## HTTP Endpoint
+
+The HTTP and SocketIO endpoint is available on port `3000`. To check if the server is working correctly, type `localhost:3000` in the browser address bar. 
+
 ## SocketIO Events
 
 The API for managing the peripheral manager uses the SocketIO events to communicate with the peripheral manager
@@ -40,7 +44,7 @@ Sends the command and the list of arguments that go with the command to be conve
 }
 ```
 
-** Note ! - Not yet implemented **
+**Note ! - Not yet implemented**
 
 ### send-raw
 
@@ -133,11 +137,3 @@ socket.on('<name>', function(data){
     console.log(data);
 })
 ```
-
-## TODOS:
-
-1. Testing of Socket-Serial interface
-1. Integration of command generation from David's project
-1. HTML Management UI
-1. Error catching and failure reporting
-1. Packaging/Porting Test
