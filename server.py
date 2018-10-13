@@ -1,3 +1,4 @@
+import sys
 import eventlet
 import eventlet.wsgi
 import socketio
@@ -6,7 +7,8 @@ from flask import Flask, render_template
 import devices
 
 sio = socketio.Server()
-app = Flask(__name__)
+pyinstaller_template_folder = os.path.join(sys._MEIPASS, 'templates')
+app = Flask(__name__, template_folder=pyinstaller_template_folder)
 app.debug = True
 
 # Flask Route
