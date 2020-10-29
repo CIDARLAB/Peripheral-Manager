@@ -6,21 +6,17 @@ import serial
 
 class Connection:
 
-    name = ""
-    isvirtual = False
-    address = ""
-    serialconnection = None
-    logfile = None
-    socketio_reference = None
-    rx_buffer = []
-    rxthread = None
-    _stopevent = threading.Event()
 
-    def __init__(self, name, address, socketio, isvirtual=False):
+    def __init__(self, name:str = "", address:str = "", socketio = None, isvirtual: bool=False):
         self.name = name
         self.address = address
         self.isvirtual = isvirtual
         self.socketio_reference = socketio
+        self.serialconnection = None
+        self.logfile = None
+        self.rxthread = None
+        self.rx_buffer = []
+        self._stopevent = threading.Event()
 
         if isvirtual:
             #This is a dummy connection instantiate a new file
