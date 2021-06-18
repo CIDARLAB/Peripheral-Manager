@@ -137,3 +137,6 @@ socket.on('<name>', function(data){
     console.log(data);
 })
 ```
+
+# LICENSCE
+BSD-3
