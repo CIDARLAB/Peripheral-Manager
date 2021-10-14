@@ -4,16 +4,14 @@ The peripheral manager is a daemon that runs on the workstation that allows clou
 
 ## Dev Dependencies
 
-This project uses `pipenv` to manage dependencies and the runtime (Python 3.6). The following commands will can be used to set up the development environment.
+This project uses `poetry` to manage dependencies and the runtime (Python 3.8 and above). The following commands will can be used to set up the development environment. You can follow one of the many installation options shown one the poetry [website](https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions) (https://python-poetry.org/docs/#osx--linux--bashonwindows-install-instructions). We recommend installing pyenv to manage your python environments (https://github.com/pyenv/pyenv)
 
 ```
 # This assumes you clone the repo and have python installed on your machine
 
-pip install pipenv          #Install pipenv 
 cd <project directory>
-pipenv install              #Creates sandbox runtime env and downloads all dependencies
+poetry install              #Creates sandbox runtime env and downloads all dependencies
 pipenv shell                #Changes the terminal environment into the sandbox env, <ctrl + D> to exit
-pip freeze                  #Ensures the runtime python interpreter finds all modules
 python server.py            #Runs the primary application
 ``` 
 

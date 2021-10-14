@@ -6,7 +6,7 @@ authors = ["Radhakrishna Sanka <rkrishnasanka@gmail.com>"]
 license = "BSD-3"
 
 [tool.poetry.dependencies]
-python = "3.8"
+python = "^3.8"
 flask = "^2.0.1"
 eventlet = "^0.31.0"
 pyserial = "^3.5"
